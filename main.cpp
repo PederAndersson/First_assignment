@@ -82,10 +82,14 @@ double variance_value (const std::vector<double>& data) {
 
     return squarediff / data.size();
 }
+struct values {
 
+};
 
 
 int main() {
+    std::vector<values> store_value;
+
     menu_choice();
 
 
