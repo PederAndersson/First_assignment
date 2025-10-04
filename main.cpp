@@ -3,16 +3,6 @@
 #include <vector>
 #include <cmath>
 
-void print_menu() {
-    std::cout << "Hello, welcome to our sensor input/output program!, what would you like to do?\n";
-    std::cout << "1. Input values.\n";
-    std::cout << "2. Check the total sum.\n";
-    std::cout << "3. Check the average value.\n";
-    std::cout << "4. Highest or lowest value.\n";
-    std::cout << "5. Variance and standard deviation.\n";
-    std::cout << "6. Exit.\n";
-}
-
 int fail_safe() {
     int y;
     while (true) {
@@ -25,6 +15,48 @@ int fail_safe() {
         }
     }
 }
+void print_menu() {
+    std::cout << "Hello, welcome to our sensor input/output program!, what would you like to do?\n";
+    std::cout << "1. Input values.\n";
+    std::cout << "2. Check statistics.\n";
+    std::cout << "3. Find value.\n";
+    std::cout << "4. Sort values.\n";
+    std::cout << "5. Exit.\n";
+}
+
+int menu_choice () {
+    while (true) {
+        print_menu();
+
+        int choice;
+        std::cout << "What would you like to do : ";
+        choice = fail_safe();
+
+        switch (choice) {
+            case 1:
+                std::cout << "Here you can input data.\n";
+                std::cout << "Input :";
+                break;
+            case 2:
+                std::cout << "Here you can see all the statistics.\n";
+                break;
+            case 3:
+                std::cout << "Here we can find a specific value.\n";
+                break;
+            case 4:
+                std::cout << "Here we can sort the value.\n";
+                break;
+            default:
+                std::cout << "Have a good day.";
+                return 0;
+
+        }
+
+
+    }
+
+}
+
 
 int input_sensor_values() {
     std::cout << "Please input your value :";
@@ -54,41 +86,8 @@ double variance_value (const std::vector<double>& data) {
 
 
 int main() {
-    std::vector<double> sensor_input;
-    int value, number_of_input;
-    std::cout << "please input the number of values you want to input :";
-    number_of_input = fail_safe();
+    menu_choice();
 
-    for (int i = 0; i < number_of_input; i++) {
-       value = input_sensor_values();
-        sensor_input.push_back(value);
-    }
-    int sum = 0;
-    int min_value = sensor_input[0];
-    int max_value = sensor_input[0];
-    for (int i = 0; i < number_of_input; i++) {
-        std::cout << sensor_input[i] << " ";
-        std::cout << "\n";
-        sum += sensor_input[i];
-        if (sensor_input[i] < min_value) {
-            min_value = sensor_input[i];
-        }
-        if (sensor_input[i] > max_value) {
-            max_value = sensor_input[i];
-        }
-    }
-    double variance;
-    variance = variance_value(sensor_input);
 
-    int average_value = sum/sensor_input.size();
-    std::cout << "the sum is :" << sum << "\n";
-    std::cout << "the number of inputs :" << sensor_input.size() << "\n";
-    std::cout << "the average value is :" << average_value << "\n";
-    std::cout << "the minimum value is :" << min_value << "\n";
-    std::cout << "the maximum value is :" << max_value << "\n";
-    std::cout << "the variance is :" << variance << "\n";
-    std::cout << "the standard deviation is " << sqrt(variance) << "\n";
-
-    //print_menu();
     return 0;
 }
