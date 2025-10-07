@@ -3,19 +3,9 @@
 #include <limits>
 #include <vector>
 #include <cmath>
+#include <iomanip>
 
-int fail_safe() {
-    int y;
-    while (true) {
-        if (!(std::cin >> y)) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
-            std::cout << "Please input a number instead.\n";
-        } else {
-            return y;
-        }
-    }
-}
+int fail_safe();
 void print_menu() {
     std::cout << "Hello, welcome to our sensor input/output program!, what would you like to do?\n";
     std::cout << "1. Input values.\n";
@@ -25,69 +15,28 @@ void print_menu() {
     std::cout << "5. Exit.\n";
 }
 
-int input_sensor_values() {
-    std::cout << "Please input your value :";
-    int value = fail_safe();
-    return value;
-}
-double variance_value (const std::vector<double>& data) {
+int input_sensor_values();
 
-    if (data.empty()) return 0;
+double variance_value(const std::vector<double>& data);
 
-    double sum = 0.0;
-    for (double x : data) {
-        sum += x;
-    }
-
-    double mean = sum/data.size();
-
-    double squarediff = 0.0;
-    for (double x : data) {
-        double diff = x - mean;
-        squarediff += diff*diff;
-    }
-
-    return squarediff / data.size();
-}
-int min_value(const std::vector<double>& y) {
-    int min = y[0];
-    for (int x : y) {
-        if (x < min) {
-            min = x;
-        }
-    }
-    return min;
-}
-int max_value(const std::vector<double>& y) {
-    int max = y[0];
-    for (int x : y) {
-        if (x > max) {
-            max = x;
-        }
-    }
-    return max;
-}
-double vector_sum(const std::vector<double>& y) {
-    double sum = 0;
-    for (double x : y) {
-        sum += x;
-    }
-    return sum;
-}
+int min_value(const std::vector<double>& store_value);
+int max_value(const std::vector<double>& store_value);
+double vector_sum(const std::vector<double>& store_value) ;
 
 struct Statistc_values {
     int number_entries;
     int sum;
-    float mean;
+    double mean;
     int value_min, value_max;
     double variance, standard_dev;
 
 };
-
+bool YesNo();
 
 
 int main() {
-    std::vector<double> store_value = {4, 6, 9, 5, 7, 6, 5};
+    std::cout << std::fixed << std::setprecision(2);
+    std::vector<double> store_value = {2, 5, 3, 3, 5, 6, 9};
     Statistc_values statistics;
     double sum = vector_sum(store_value);
     statistics.number_entries = store_value.size();
@@ -99,20 +48,19 @@ int main() {
     statistics.standard_dev = sqrt(statistics.variance);
     while (true) {
         print_menu();
-
+        int input;
 
         int choice;
         std::cout << "What would you like to do : ";
         choice = fail_safe();
-
         switch (choice) {
             case 1:
-
-                std::cout << "Here you can input data.\n";
                 do {
-                store_value.push_back(input_sensor_values());
-
-                }while ();
+                std::cout << "Here you can input data.\n";
+                input = input_sensor_values();
+                store_value.push_back(input);
+                YesNo();
+                }while (YesNo() == true);
                 break;
             case 2:
                 std::cout << "Here you can see all the statistics.\n";
