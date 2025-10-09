@@ -4,18 +4,12 @@
 #include <vector>
 #include <cmath>
 #include <iomanip>
+#include "functions.h"
 
-int fail_safe();
-void print_menu() {
-    std::cout << "Hello, welcome to our sensor input/output program!, what would you like to do?\n";
-    std::cout << "1. Input values.\n";
-    std::cout << "2. Check statistics.\n";
-    std::cout << "3. Find value.\n";
-    std::cout << "4. Sort values.\n";
-    std::cout << "5. Exit.\n";
-}
 
-int input_sensor_values();
+
+
+int input_sensor_value();
 
 double variance_value(const std::vector<double>& data);
 
@@ -23,60 +17,96 @@ int min_value(const std::vector<double>& store_value);
 int max_value(const std::vector<double>& store_value);
 double vector_sum(const std::vector<double>& store_value) ;
 
-struct Statistc_values {
-    int number_entries;
-    int sum;
-    double mean;
-    int value_min, value_max;
-    double variance, standard_dev;
+struct Statistics {
+    int number_entries = {};
+    double sum = {};
+    double mean = {};
+    double value_min = {};
+    double value_max = {};
+    double variance = {};
+    double standard_dev = {};
 
+    static Statistics calculate(const std::vector<double> &);
 };
-bool YesNo();
+
+Statistics Statistics::calculate(const std::vector<double> &store_value){
+    Statistics stats;
+    double sum = vector_sum(store_value);
+    stats.number_entries = static_cast<int>(store_value.size());
+    stats.sum = sum;
+    stats.mean = stats.sum/static_cast<double>(store_value.size());
+    stats.value_min = min_value(store_value);
+    stats.value_max = max_value(store_value);
+    stats.variance = variance_value(store_value);
+    stats.standard_dev = sqrt(stats.variance);
+    return stats;
+}
+
+bool go_again();
+
+bool sort_desc(int a, int b) {
+    return a > b;
+}
 
 
 int main() {
     std::cout << std::fixed << std::setprecision(2);
-    std::vector<double> store_value = {2, 5, 3, 3, 5, 6, 9};
-    Statistc_values statistics;
-    double sum = vector_sum(store_value);
-    statistics.number_entries = store_value.size();
-    statistics.sum = sum;
-    statistics.mean = statistics.sum/store_value.size();
-    statistics.value_min = min_value(store_value);
-    statistics.value_max = max_value(store_value);
-    statistics.variance = variance_value(store_value);
-    statistics.standard_dev = sqrt(statistics.variance);
-    while (true) {
-        print_menu();
-        int input;
+    std::vector<double> store_values = {2, 5, 3, 3, 5, 6, 9};
+    Statistics stats = Statistics::calculate(store_values);
 
-        int choice;
+    while (true) {
+        Functions::print_menu();
+        int input;
         std::cout << "What would you like to do : ";
-        choice = fail_safe();
-        switch (choice) {
+        switch (Functions::valid_input()) {
             case 1:
                 do {
                 std::cout << "Here you can input data.\n";
-                input = input_sensor_values();
-                store_value.push_back(input);
-                YesNo();
-                }while (YesNo() == true);
+                input = input_sensor_value();
+                store_values.push_back(input);
+                }while (go_again() == true);
+                stats = Statistics::calculate(store_values);
                 break;
-            case 2:
-                std::cout << "Here you can see all the statistics.\n";
-                std::cout << "Number of entries :" << statistics.number_entries << "\n";
-                std::cout << "Sum :" << statistics.sum << "\n";
-                std::cout << "The average value :" << statistics.mean << "\n";
-                std::cout << "The highest value :" << statistics.value_max << "\t the lowest value :" << statistics.value_min << "\n";
-                std::cout << "The variance :" << statistics.variance << "\n";
-                std::cout << "The standard deviation :" << statistics.standard_dev << "\n";
 
+            case 2:
+                Statistics::calculate(store_values);
+                std::cout << "Here you can see all the statistics.\n";
+                std::cout << "Number of entries :" << stats.number_entries << "\n";
+                std::cout << "Sum :" << stats.sum << "\n";
+                std::cout << "The average value :" << stats.mean << "\n";
+                std::cout << "The highest value :" << stats.value_max << "\t the lowest value :" << stats.value_min << "\n";
+                std::cout << "The variance :" << stats.variance << "\n";
+                std::cout << "The standard deviation :" << stats.standard_dev << "\n";
                 break;
+
             case 3:
                 std::cout << "Here we can find a specific value.\n";
+
                 break;
+
             case 4:
-                std::cout << "Here we can sort the value.\n";
+                std::cout << "Here we can sort the value in ascending or descending order.\n";
+                std::cout << "1. Ascending. \n" << "2. Descending\n";
+                std::cout << "what would you like to do :";
+                switch (Functions::valid_input()) {
+                    case 1:
+                        std::cout << "Ascending order.\n";
+                        std::stable_sort(store_values.begin(),store_values.end());
+                        for (int s : store_values)
+                            std::cout << s << " ";
+                        break;
+                    case 2:
+                        std::cout << "Descending order.\n";
+                        std::stable_sort(store_values.begin(),store_values.end(),sort_desc);
+                        for (int s : store_values)
+                            std::cout << s << " ";
+                        break;
+                    default:
+                        std::cout << "wrong stupid!";
+                }
+
+            case 5:
+
                 break;
             default:
                 std::cout << "Have a good day.";

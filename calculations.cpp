@@ -4,6 +4,7 @@
 #include <iostream>
 #include <limits>
 #include <vector>
+#include "calculations.h"
 
 double variance_value (const std::vector<double>& data) {
 
