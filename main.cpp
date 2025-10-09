@@ -4,18 +4,9 @@
 #include <vector>
 #include <cmath>
 #include <iomanip>
+
+#include "calculations.h"
 #include "functions.h"
-
-
-
-
-int input_sensor_value();
-
-double variance_value(const std::vector<double>& data);
-
-int min_value(const std::vector<double>& store_value);
-int max_value(const std::vector<double>& store_value);
-double vector_sum(const std::vector<double>& store_value) ;
 
 struct Statistics {
     int number_entries = {};
@@ -31,18 +22,16 @@ struct Statistics {
 
 Statistics Statistics::calculate(const std::vector<double> &store_value){
     Statistics stats;
-    double sum = vector_sum(store_value);
+
     stats.number_entries = static_cast<int>(store_value.size());
-    stats.sum = sum;
+    stats.sum = Calculations::vector_sum(store_value);
     stats.mean = stats.sum/static_cast<double>(store_value.size());
-    stats.value_min = min_value(store_value);
-    stats.value_max = max_value(store_value);
-    stats.variance = variance_value(store_value);
+    stats.value_min = Calculations::min_value(store_value);
+    stats.value_max = Calculations::max_value(store_value);
+    stats.variance = Calculations::variance_value(store_value);
     stats.standard_dev = sqrt(stats.variance);
     return stats;
 }
-
-bool go_again();
 
 bool sort_desc(int a, int b) {
     return a > b;
@@ -56,15 +45,13 @@ int main() {
 
     while (true) {
         Functions::print_menu();
-        int input;
         std::cout << "What would you like to do : ";
         switch (Functions::valid_input()) {
             case 1:
                 do {
                 std::cout << "Here you can input data.\n";
-                input = input_sensor_value();
-                store_values.push_back(input);
-                }while (go_again() == true);
+                store_values.push_back(Functions::input_sensor_value());
+                }while (Functions::run_again() == true);
                 stats = Statistics::calculate(store_values);
                 break;
 
@@ -79,10 +66,17 @@ int main() {
                 std::cout << "The standard deviation :" << stats.standard_dev << "\n";
                 break;
 
-            case 3:
+            case 3:{
                 std::cout << "Here we can find a specific value.\n";
-
+                std::cout << "input value you want to search for :";
+                int findnumber = Functions::valid_input();
+                if ( std::find(store_values.begin(), store_values.end(),findnumber ) !=store_values.end()) {
+                    std::cout << findnumber << " is here.\n";
+                }else {
+                    std::cout << findnumber << " is not here.\n";
+                }
                 break;
+            }
 
             case 4:
                 std::cout << "Here we can sort the value in ascending or descending order.\n";
@@ -92,21 +86,29 @@ int main() {
                     case 1:
                         std::cout << "Ascending order.\n";
                         std::stable_sort(store_values.begin(),store_values.end());
-                        for (int s : store_values)
+                        for (double s : store_values)
                             std::cout << s << " ";
                         break;
                     case 2:
                         std::cout << "Descending order.\n";
                         std::stable_sort(store_values.begin(),store_values.end(),sort_desc);
-                        for (int s : store_values)
+                        for (double s : store_values)
                             std::cout << s << " ";
                         break;
                     default:
                         std::cout << "wrong stupid!";
                 }
 
-            case 5:
-
+            case 5: {
+                    std::cout << "Number of Error messages!\n";
+                    int errors = 0;
+                    for (double s : store_values) {
+                        if (s >= 10) {
+                            errors++;
+                        }
+                    }
+                    std::cout << "The sensor have pinged " << errors << " number of errors\n";
+                }
                 break;
             default:
                 std::cout << "Have a good day.";

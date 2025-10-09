@@ -1,10 +1,9 @@
 
-#include <iostream>
-#include <limits>
+
 #include "functions.h"
 
 
-int Functions::valid_input() {
+int Functions::valid_input() { // function to validate that your input is a number not a letter
     int y;
     while (true) {
         if (!(std::cin >> y)) {
@@ -17,20 +16,20 @@ int Functions::valid_input() {
     }
 }
 
-int input_sensor_value() {
+int Functions::input_sensor_value() { // function to input a new value.
     std::cout << "Please input your value :";
     int value = Functions::valid_input();
     return value;
 }
 
-bool go_again(){ // funktion för om man vill köra om programmet
+bool Functions::run_again(){ // function to check if you want to run again.
     char answer;
 
     while (true) {
         std::cout << "Would you like to go again? (y/n) ";
         std::cin >> answer;
-        char ch = answer;
-        char lowercase = std::tolower(ch);
+       char ch = answer;
+       char lowercase = std::tolower(ch);
         if (std::isdigit(ch)) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
@@ -50,15 +49,6 @@ void Functions::print_menu() {
     std::cout << "2. Check statistics.\n";
     std::cout << "3. Find value.\n";
     std::cout << "4. Sort values.\n";
+    std::cout << "5. Number of errors.\n";
     std::cout << "6. Exit.\n";
-}
-
-void Functions::print_stats(const & stats) {
-    std::cout << "Here you can see all the statistics.\n";
-    std::cout << "Number of entries :" << stats.number_entries << "\n";
-    std::cout << "Sum :" << stats.sum << "\n";
-    std::cout << "The average value :" << stats.mean << "\n";
-    std::cout << "The highest value :" << stats.value_max << "\t the lowest value :" << stats.value_min << "\n";
-    std::cout << "The variance :" << stats.variance << "\n";
-    std::cout << "The standard deviation :" << stats.standard_dev << "\n";
 }

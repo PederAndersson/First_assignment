@@ -6,9 +6,9 @@
 #include <vector>
 #include "calculations.h"
 
-double variance_value (const std::vector<double>& data) {
+double Calculations::variance_value(const std::vector<double>& data) {
 
-    if (data.empty()) return 0;
+    if (data.empty()) return 0.0;
 
     double sum = 0.0;
     for (double x : data) {
@@ -26,7 +26,7 @@ double variance_value (const std::vector<double>& data) {
     return squarediff / data.size();
 }
 
-int min_value(const std::vector<double>& store_value) {
+int Calculations::min_value(const std::vector<double>& store_value) {
     int min = store_value[0];
     for (int x : store_value) {
         if (x < min) {
@@ -36,7 +36,7 @@ int min_value(const std::vector<double>& store_value) {
     return min;
 }
 
-int max_value(const std::vector<double>& store_value) {
+int Calculations::max_value(const std::vector<double>& store_value) {
     int max = store_value[0];
     for (int x : store_value) {
         if (x > max) {
@@ -46,7 +46,7 @@ int max_value(const std::vector<double>& store_value) {
     return max;
 }
 
-double vector_sum(const std::vector<double>& store_value) {
+double Calculations::vector_sum(const std::vector<double>& store_value) {
     double sum = 0;
     for (double x : store_value) {
         sum += x;
