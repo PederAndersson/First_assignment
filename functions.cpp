@@ -3,6 +3,8 @@
 #include "functions.h"
 
 
+
+
 int Functions::valid_input() { // function to validate that your input is a number not a letter
     int y;
     while (true) {
@@ -46,9 +48,21 @@ bool Functions::run_again(){ // function to check if you want to run again.
 void Functions::print_menu() {
     std::cout << "Hello, welcome to our sensor input/output program!, what would you like to do?\n";
     std::cout << "1. Input values.\n";
-    std::cout << "2. Check statistics.\n";
-    std::cout << "3. Find value.\n";
-    std::cout << "4. Sort values.\n";
-    std::cout << "5. Number of errors.\n";
-    std::cout << "6. Exit.\n";
+    std::cout << "2. Download sensor data.\n";
+    std::cout << "3. Check statistics.\n";
+    std::cout << "4. Find value.\n";
+    std::cout << "5. Sort values.\n";
+    std::cout << "6. Number of errors.\n";
+    std::cout << "7. Exit.\n";
+}
+
+void Functions::generate_numbers(std::vector<double>& vec) {
+    std::random_device rd; //using this random generator as a seed.
+    std::mt19937 mt(rd()); //generating random numbers with the mersenne twister seeded with random_device.
+    std::uniform_int_distribution uniform (1, 25); // set the range for the highest and lowest number generated, while handling the statistical spread of numbers
+    for (int i = 0; i < 25; i++) {
+        vec.push_back(uniform(mt)); // for loop to push the random numbers to the vector.
+    }
+    std::cout << "Data has been downloaded.\n";
+    std::cout << std::endl;
 }

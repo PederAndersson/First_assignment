@@ -5,6 +5,7 @@
 #ifndef FIRST_ASSIGNMENT_CALCULATIONS_H
 #define FIRST_ASSIGNMENT_CALCULATIONS_H
 #include <vector>
+#include <cmath>
 
 class Calculations {
 

@@ -1,12 +1,10 @@
 #include <algorithm>
-#include <iostream>
-#include <vector>
-#include <cmath>
 #include <iomanip>
+#include <random>
+#include <vector>
 
 #include "calculations.h"
 #include "functions.h"
-
 
 
 struct Statistics {
@@ -61,8 +59,11 @@ int main() {
                 }while (Functions::run_again() == true);
                 std::cout << std::endl;
                 break;
-
             case 2:
+                Functions::generate_numbers(store_values);
+
+                break;
+            case 3:
                     if (store_values.empty()) {
                         std::cout << "The datastorage is empty, please input your findings\n";
 
@@ -85,7 +86,7 @@ int main() {
 
                 break;
 
-            case 3:{
+            case 4:{
                 std::cout << "Here we can find a specific value.\n";
                 std::cout << "input value you want to search for :";
                 double search_number = Functions::valid_input();
@@ -98,7 +99,7 @@ int main() {
                 break;
             }
 
-            case 4:
+            case 5:
                 std::cout << "Here we can sort the value in ascending or descending order.\n";
                 std::cout << "1. Ascending. \n" << "2. Descending\n";
                 std::cout << "what would you like to do :";
@@ -127,7 +128,7 @@ int main() {
                 break;
 
 
-            case 5: {
+            case 6: {
                     std::cout << "Number of warnings detected!\n";
                     int warning = 0;
                     for (double s : store_values) {
