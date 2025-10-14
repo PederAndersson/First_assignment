@@ -1,9 +1,7 @@
 //
 // Created by peder on 2025-10-04.
 //
-#include <iostream>
-#include <limits>
-#include <vector>
+
 #include "calculations.h"
 
 double Calculations::variance_value(const std::vector<double>& data) {

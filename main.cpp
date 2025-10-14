@@ -1,7 +1,6 @@
-#include <algorithm>
+
 #include <iomanip>
-#include <random>
-#include <vector>
+
 
 #include "calculations.h"
 #include "functions.h"
@@ -33,9 +32,18 @@ Statistics Statistics::calculate(const std::vector<double> &store_value){
     return stats;
 }
 
-bool sort_desc(double a, double b) {
-    return a > b;
+void print_statistics(const Statistics& stats){
+    std::cout << "Here you can see all the statistics.\n";
+    std::cout << "Number of entries :" << stats.number_entries << "\n";
+    std::cout << "Sum :" << stats.sum << "\n";
+    std::cout << "The average value :" << stats.mean << "\n";
+    std::cout << "The highest value :" << stats.value_max << "\t the lowest value :" << stats.value_min << "\n";
+    std::cout << "The variance :" << stats.variance << "\n";
+    std::cout << "The standard deviation :" << stats.standard_dev << "\n";
+    std::cout << std::endl;
+
 }
+
 
 
 int main() {
@@ -50,7 +58,7 @@ int main() {
         switch (Functions::valid_input()) {
             case 1:
                 do {
-                std::cout << "Here you can input data.\n";
+                    std::cout << "Here you can input data.\n";
                     std::cout << "how many values would you like input?";
                     entries = Functions::valid_input();
                     for (int i = 0; i < entries; i++) {
@@ -60,90 +68,55 @@ int main() {
                 std::cout << std::endl;
                 break;
             case 2:
+                Functions::counter();
                 Functions::generate_numbers(store_values);
-
                 break;
             case 3:
-                    if (store_values.empty()) {
-                        std::cout << "The datastorage is empty, please input your findings\n";
+                if (store_values.empty()) {
+                    std::cout << "The datastorage is empty, please input your findings\n";
 
-                        std::cout << "how many values would you like input?";
-                        entries = Functions::valid_input();
-                        for (int i = 0; i < entries; i++) {
-                            store_values.push_back(Functions::input_sensor_value());
-                        }
-                        break;
+                    std::cout << "how many values would you like input?";
+                    entries = Functions::valid_input();
+                    for (int i = 0; i < entries; i++) {
+                        store_values.push_back(Functions::input_sensor_value());
                     }
-                    stats = Statistics::calculate(store_values);
-                    std::cout << "Here you can see all the statistics.\n";
-                    std::cout << "Number of entries :" << stats.number_entries << "\n";
-                    std::cout << "Sum :" << stats.sum << "\n";
-                    std::cout << "The average value :" << stats.mean << "\n";
-                    std::cout << "The highest value :" << stats.value_max << "\t the lowest value :" << stats.value_min << "\n";
-                    std::cout << "The variance :" << stats.variance << "\n";
-                    std::cout << "The standard deviation :" << stats.standard_dev << "\n";
-                    std::cout << std::endl;
-
+                    break;
+                }
+                stats = Statistics::calculate(store_values);
+                print_statistics(stats);
                 break;
 
             case 4:{
-                std::cout << "Here we can find a specific value.\n";
+                std::cout << "Here we can find a specific value between 1-50.\n";
                 std::cout << "input value you want to search for :";
-                double search_number = Functions::valid_input();
-                if ( std::find(store_values.begin(), store_values.end(), search_number ) !=store_values.end()) {
-                    std::cout << search_number << " is here.\n";
-                }else {
-                    std::cout << search_number << " is not here.\n";
-                }
-                std::cout << std::endl;
+                Functions::data_finder(store_values,Functions::valid_input());
                 break;
             }
 
             case 5:
+
                 std::cout << "Here we can sort the value in ascending or descending order.\n";
                 std::cout << "1. Ascending. \n" << "2. Descending\n";
                 std::cout << "what would you like to do :";
-                switch (Functions::valid_input()) {
-                    case 1:
-                        std::cout << "Ascending order.\n";
-                        std::stable_sort(store_values.begin(),store_values.end());
-                        for (double s : store_values) {
-                            std::cout << s << " ";
-                        }
-                        break;
-                    case 2:
-                        std::cout << "Descending order.\n";
-                        std::stable_sort(store_values.begin(),store_values.end(),sort_desc);
-                        for (double s : store_values) {
-                            std::cout << s << " ";
-                        }
-                        std::cout << std::endl;
-                        break;
-                    default:
-                        std::cout << "wrong stupid!";
-                        std::cout << std::endl;
-                        break;
-                }
-                std::cout << std::endl;
+                Functions::data_sorter(store_values,Functions::valid_input());
                 break;
 
 
             case 6: {
-                    std::cout << "Number of warnings detected!\n";
-                    int warning = 0;
-                    for (double s : store_values) {
-                        if (s > 10) {
-                            warning++;
-                        }
-                    }
-                    std::cout << "The sensor have pinged " << warning << " number of warnings\n";
-                }
-                std::cout << std::endl;
+                std::cout << "Storage usage.\n";
+                Functions::print_storage_usage(store_values);
+
+                break;
+
+            }
+            case 7:
+                std::cout << "Here you can check if any of the sensor measurements has gone above a certain value.\n";
+                std::cout << "what value would you like to check? (between 1-50) :";
+                Functions::Threshold_detection(store_values,Functions::valid_input());
                 break;
             default:
-                std::cout << "Have a good day.";
-                return 0;
+            std::cout << "Have a good day.";
+            return 0;
         }
-
     }
 }
