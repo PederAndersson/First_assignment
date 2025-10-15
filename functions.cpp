@@ -67,17 +67,19 @@ void Functions::print_menu() {
 }
 
 void Functions::generate_numbers(std::vector<double>& vec) {
+    int choice = Functions::valid_input();
     std::random_device rd; //using this random generator as a seed.
     std::mt19937 mt(rd()); //generating random numbers with the mersenne twister seeded with random_device.
     std::uniform_int_distribution uniform (1, 50); // set the range for the highest and lowest number generated, while handling the statistical spread of numbers
-    for (int i = 0; i < 25; i++) {
+    for (int i = 0; i < choice; i++) {
         vec.push_back(uniform(mt)); // for loop to push the random numbers to the vector.
     }
+    Functions::counter();
     std::cout << "Data has been downloaded.\n";
     std::cout << std::endl;
 }
 
-void Functions::print_storage_usage(const std::vector<double>& vec) {
+void Functions::print_storage_usage(const std::vector<double>& vec) { //function to simulate to see how much space is occupied
     constexpr float storage_size = 500; //simulated size storage space on the sensor module.
     float percentage = 0;
     percentage = (vec.size() / storage_size) * 100;
@@ -96,7 +98,7 @@ void Functions::counter() { //a counter to simulate a progressbar.
     std::cout << "100% done!" << std::endl;
 }
 
-void Functions::data_sorter(const std::vector<double>& vec, int x) {
+void Functions::data_sorter(const std::vector<double>& vec, int x) { //function to sort the data either ascending or descending also checks if it's empty
     std::vector<double> temp = vec;
     if (temp.empty()) {
         std::cout << "The data storage is empty.\n";
@@ -118,7 +120,7 @@ void Functions::data_sorter(const std::vector<double>& vec, int x) {
     std::cout << std::endl;
 }
 
-void Functions::data_finder(const std::vector<double> &vec, int x) {
+void Functions::data_finder(const std::vector<double> &vec, int x) { //check if there is a certain number in the vector
 
     int search_number = x;
     if ( std::find(vec.begin(), vec.end(), search_number ) !=vec.end()) {
@@ -129,7 +131,7 @@ void Functions::data_finder(const std::vector<double> &vec, int x) {
     std::cout << std::endl;
 }
 
-void Functions::Threshold_detection(const std::vector<double> &vec, int set_value) {
+void Functions::Threshold_detection(const std::vector<double> &vec, int set_value) { //checks if any number in the vector exceeds a certain value
     int warnings = 0;
     for (int y : vec) {
         if (y > set_value) {

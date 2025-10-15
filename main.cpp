@@ -16,7 +16,7 @@ struct Statistics {
     double standard_dev = {};
 
     static Statistics calculate(const std::vector<double> &);
-};
+}; //struct to store all the statistics data.
 
 Statistics Statistics::calculate(const std::vector<double> &store_value){
 
@@ -67,10 +67,6 @@ int main() {
                 }while (Functions::run_again() == true);
                 std::cout << std::endl;
                 break;
-            case 2:
-                Functions::counter();
-                Functions::generate_numbers(store_values);
-                break;
             case 3:
                 if (store_values.empty()) {
                     std::cout << "The datastorage is empty, please input your findings\n";
@@ -85,13 +81,18 @@ int main() {
                 stats = Statistics::calculate(store_values);
                 print_statistics(stats);
                 break;
+            case 2:
+                std::cout << "please input the the amount of data to generate: ";
+                Functions::generate_numbers(store_values);
+                //Functions::counter();
+                break;
 
-            case 4:{
+            case 4:
                 std::cout << "Here we can find a specific value between 1-50.\n";
                 std::cout << "input value you want to search for :";
                 Functions::data_finder(store_values,Functions::valid_input());
                 break;
-            }
+
 
             case 5:
 
@@ -102,18 +103,18 @@ int main() {
                 break;
 
 
-            case 6: {
+            case 6:
                 std::cout << "Storage usage.\n";
                 Functions::print_storage_usage(store_values);
 
                 break;
 
-            }
             case 7:
                 std::cout << "Here you can check if any of the sensor measurements has gone above a certain value.\n";
                 std::cout << "what value would you like to check? (between 1-50) :";
                 Functions::Threshold_detection(store_values,Functions::valid_input());
                 break;
+
             default:
             std::cout << "Have a good day.";
             return 0;
