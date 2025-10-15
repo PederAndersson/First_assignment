@@ -84,7 +84,6 @@ int main() {
             case 2:
                 std::cout << "please input the the amount of data to generate: ";
                 Functions::generate_numbers(store_values);
-                //Functions::counter();
                 break;
 
             case 4:
