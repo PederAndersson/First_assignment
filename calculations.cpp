@@ -4,7 +4,7 @@
 
 #include "calculations.h"
 
-double Calculations::variance_value(const std::vector<double>& data) {
+double Calculations::variance_value(const std::vector<double>& data) { //calculates the variance of all the numbers in vector
 
     if (data.empty()) return 0.0;
 
@@ -22,7 +22,7 @@ double Calculations::variance_value(const std::vector<double>& data) {
     }
 
     return squarediff / data.size();
-} //calculates the variance of all the numbers in vector
+}
 
 int Calculations::min_value(const std::vector<double>& store_value) {
     int min = store_value[0];

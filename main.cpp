@@ -69,13 +69,7 @@ int main() {
                 break;
             case 3:
                 if (store_values.empty()) {
-                    std::cout << "The datastorage is empty, please input your findings\n";
-
-                    std::cout << "how many values would you like input?";
-                    entries = Functions::valid_input();
-                    for (int i = 0; i < entries; i++) {
-                        store_values.push_back(Functions::input_sensor_value());
-                    }
+                    std::cout << "The datastorage is empty.\n\n";
                     break;
                 }
                 stats = Statistics::calculate(store_values);
