@@ -7,4 +7,6 @@ add_executable(First_assignment main.cpp
         calculations.cpp
         functions.cpp
         functions.h
+        statistics.cpp
+        statistics.h
 )

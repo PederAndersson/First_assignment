@@ -1,9 +1,9 @@
 
 #ifndef FIRST_ASSIGNMENT_FUNCTIONS_H
 #define FIRST_ASSIGNMENT_FUNCTIONS_H
+#include <vector>
 #include <iostream>
 #include <limits>
-#include <vector>
 #include <random>
 #include <chrono>
 #include <thread>
