@@ -67,18 +67,42 @@ void Functions::print_menu() {
     std::cout << "8. Exit.\n";
 }
 
-void Functions::generate_numbers(std::vector<double>& vec) {
-    int choice = Functions::valid_input();
+void Functions::generate_numbers(std::vector<double>& vec, std::vector<std::string>& vec2) {
+    const int choice = Functions::valid_input();
+    std::string timestamp;
     std::random_device rd; //using this random generator as a seed.
     std::mt19937 mt(rd()); //generating random numbers with the mersenne twister seeded with random_device.
     std::uniform_int_distribution uniform (1, 50); // set the range for the highest and lowest number generated, while handling the statistical spread of numbers
+
     for (int i = 0; i < choice; i++) {
         vec.push_back(uniform(mt)); // for loop to push the random numbers to the vector.
+        timestamp = Functions::generate_timestamp();
+        vec2.push_back(timestamp);
     }
     Functions::counter();
     std::cout << "Data has been downloaded.\n";
     std::cout << std::endl;
 }
+
+std::string Functions::generate_timestamp() {
+    std::string timestamp;
+    std::random_device rd; //using this random generator as a seed.
+    std::mt19937 mt(rd()); //generating random numbers with the mersenne twister seeded with random_device.
+    std::uniform_int_distribution<int> hour_dist(0, 23);
+    std::uniform_int_distribution<int> minute_dist(0, 59);
+    std::uniform_int_distribution<int> second_dist(0, 59);
+
+    int hour = hour_dist(mt);
+    int minute = minute_dist(mt);
+    int second = second_dist(mt);
+
+    std::ostringstream oss;
+    oss << std::setfill('0') << std::setw(2) << hour << ":"
+        << std::setfill('0') << std::setw(2) << minute << ":"
+        << std::setfill('0') << std::setw(2) << second;
+     return oss.str();
+}
+
 
 void Functions::print_storage_usage(const std::vector<double>& vec) { //function to simulate to see how much space is occupied
     constexpr float storage_size = 500; //simulated size storage space on the sensor module.

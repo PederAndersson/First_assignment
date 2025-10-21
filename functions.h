@@ -8,6 +8,8 @@
 #include <chrono>
 #include <thread>
 #include <algorithm>
+#include <sstream>
+#include <random>
 
 
 class Functions {
@@ -17,7 +19,8 @@ public:
    static void print_menu();
    static int input_sensor_value();
    static bool run_again();
-   static void generate_numbers(std::vector<double>& vec);
+   static void generate_numbers(std::vector<double>& vec,std::vector<std::string>& vec2);
+   static std::string generate_timestamp();
    static void print_storage_usage(const std::vector<double>&  vec);
    static void counter();
    static void data_sorter(const std::vector<double>& vec, int x);

@@ -9,7 +9,9 @@
 
 
 
+
 int main() {
+    Statistics stats;
     std::cout << std::fixed << std::setprecision(2);
     std::vector<double> store_values = {};
     std::vector<std::string> store_timestamps = {};
@@ -17,7 +19,7 @@ int main() {
 
 
 
-    Statistics stats;
+
 
     while (true) {
         int entries = 0;
@@ -35,6 +37,11 @@ int main() {
                 }while (Functions::run_again() == true);
                 std::cout << std::endl;
                 break;
+            case 2:
+                std::cout << "please input the the amount of data to generate: ";
+                Functions::generate_numbers(store_values,store_timestamps);
+                break;
+
             case 3:
                 if (store_values.empty()) {
                     std::cout << "The datastorage is empty.\n\n";
@@ -42,10 +49,7 @@ int main() {
                 }
                 stats = Statistics::calculate(store_values);
                 Statistics::print_statistics(stats);
-                break;
-            case 2:
-                std::cout << "please input the the amount of data to generate: ";
-                Functions::generate_numbers(store_values);
+
                 break;
 
             case 4:

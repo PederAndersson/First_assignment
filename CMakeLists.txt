@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(First_assignment main.cpp
         calculations.cpp
+        calculations.h
         functions.cpp
         functions.h
         statistics.cpp

@@ -18,7 +18,8 @@ Statistics Statistics::calculate(const std::vector<double> &store_value){
     return stats;
 }
 
-void print_statistics(const Statistics& stats){
+void Statistics::print_statistics(const Statistics& stats){
+
     std::cout << "Here you can see all the statistics.\n";
     std::cout << "Number of entries :" << stats.number_entries << "\n";
     std::cout << "Sum :" << stats.sum << "\n";
@@ -27,6 +28,5 @@ void print_statistics(const Statistics& stats){
     std::cout << "The variance :" << stats.variance << "\n";
     std::cout << "The standard deviation :" << stats.standard_dev << "\n";
     std::cout << std::endl;
-
 }
 
