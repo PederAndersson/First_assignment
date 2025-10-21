@@ -26,6 +26,7 @@ public:
    static void data_sorter(const std::vector<double>& vec, int x);
    static void data_finder(const std::vector<double>& vec, int x);
    static void Threshold_detection(const std::vector<double>& vec, int set_value);
+   static void combine_data_timestamp(const std::vector<double>& store_value, const std::vector<std::string>& store_timestamp, std::vector<std::pair<std::string,double>>& combine);
 
 };
 #endif //FIRST_ASSIGNMENT_FUNCTIONS_H

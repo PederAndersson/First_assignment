@@ -5,11 +5,6 @@
 
 
 
-
-
-
-
-
 int main() {
     Statistics stats;
     std::cout << std::fixed << std::setprecision(2);
@@ -17,14 +12,9 @@ int main() {
     std::vector<std::string> store_timestamps = {};
     std::vector<std::pair<std::string,double>> combine = {};
 
-
-
-
-
     while (true) {
         int entries = 0;
         Functions::print_menu();
-        std::cout << "What would you like to do : ";
         switch (Functions::valid_input()) {
             case 1:
                 do {
@@ -33,13 +23,17 @@ int main() {
                     entries = Functions::valid_input();
                     for (int i = 0; i < entries; i++) {
                         store_values.push_back(Functions::input_sensor_value());
+                        store_timestamps.push_back(Functions::generate_timestamp());
                     }
                 }while (Functions::run_again() == true);
+                Functions::combine_data_timestamp(store_values,store_timestamps,combine);
                 std::cout << std::endl;
                 break;
             case 2:
                 std::cout << "please input the the amount of data to generate: ";
                 Functions::generate_numbers(store_values,store_timestamps);
+                Functions::combine_data_timestamp(store_values,store_timestamps,combine);
+
                 break;
 
             case 3:
@@ -49,7 +43,6 @@ int main() {
                 }
                 stats = Statistics::calculate(store_values);
                 Statistics::print_statistics(stats);
-
                 break;
 
             case 4:
@@ -82,7 +75,7 @@ int main() {
 
             default:
             std::cout << "Have a good day.";
-            return 0;
+                return 0;
         }
     }
 }

@@ -64,7 +64,9 @@ void Functions::print_menu() {
     std::cout << "5. Sort values.\n";
     std::cout << "6. Storage usage.\n";
     std::cout << "7. Threshold detector.\n";
-    std::cout << "8. Exit.\n";
+    std::cout << ""
+    std::cout << "9. Exit.\n";
+    std::cout << "What would you like to do: ";
 }
 
 void Functions::generate_numbers(std::vector<double>& vec, std::vector<std::string>& vec2) {
@@ -102,7 +104,6 @@ std::string Functions::generate_timestamp() {
         << std::setfill('0') << std::setw(2) << second;
      return oss.str();
 }
-
 
 void Functions::print_storage_usage(const std::vector<double>& vec) { //function to simulate to see how much space is occupied
     constexpr float storage_size = 500; //simulated size storage space on the sensor module.
@@ -165,4 +166,14 @@ void Functions::Threshold_detection(const std::vector<double> &vec, int set_valu
     }
     std::cout << "The threshold value has been breached " << warnings << " number of times.\n";
 }
+
+void Functions::combine_data_timestamp(const std::vector<double>& store_value, const std::vector<std::string>& store_timestamp, std::vector<std::pair<std::string,double>>& combine) {
+    if (store_value.size() == store_timestamp.size()) {
+        for (size_t i = 0; i < store_value.size(); i++) {
+            auto c = std::make_pair(store_timestamp[i],store_value[i]);
+            combine.push_back(c);
+        }
+    }
+}
+
 
