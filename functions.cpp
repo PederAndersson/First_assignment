@@ -2,6 +2,7 @@
 
 
 #include "functions.h"
+#include <algorithm>
 
 
 
@@ -64,7 +65,7 @@ void Functions::print_menu() {
     std::cout << "5. Sort values.\n";
     std::cout << "6. Storage usage.\n";
     std::cout << "7. Threshold detector.\n";
-    std::cout << ""
+    std::cout << "8. Read/write on database.\n";
     std::cout << "9. Exit.\n";
     std::cout << "What would you like to do: ";
 }
@@ -86,7 +87,7 @@ void Functions::generate_numbers(std::vector<double>& vec, std::vector<std::stri
     std::cout << std::endl;
 }
 
-std::string Functions::generate_timestamp() {
+std::string Functions::generate_timestamp() { //function to generate random timestamps
     std::string timestamp;
     std::random_device rd; //using this random generator as a seed.
     std::mt19937 mt(rd()); //generating random numbers with the mersenne twister seeded with random_device.
@@ -124,44 +125,64 @@ void Functions::counter() { //a counter to simulate a progressbar.
     std::cout << "100% done!" << std::endl;
 }
 
-void Functions::data_sorter(const std::vector<double>& vec, int x) { //function to sort the data either ascending or descending also checks if it's empty
-    std::vector<double> temp = vec;
-    if (temp.empty()) {
+void Functions::data_sorter(const std::vector<std::pair<std::string,double>>& vec,const int x) { //function to sort the data either ascending or descending also checks if it's empty
+    std::vector<std::pair<std::string,double>> temp = {};
+    for (const auto& y : vec) {
+        temp.push_back(y);
+    }
+    if (vec.empty()) {
         std::cout << "The data storage is empty.\n";
     }else if (x == 1) {
         std::cout << "Ascending order.\n";
-        std::stable_sort(temp.begin(),temp.end());
-        for (int y : temp) {
-            std::cout << static_cast<int>(y) << " ";
+        std::stable_sort(temp.begin(), temp.end(),
+                         [](const std::pair<std::string, double> &a, const std::pair<std::string, double> &b) {
+                             return a.second < b.second;
+                         });
+        for (const auto& y : temp) {
+            std::cout << y.second << " - " << y.first << std::endl;
         }
         std::cout << std::endl;
 
     }else {
         std::cout << "Descending order.\n";
-        std::stable_sort(temp.begin(),temp.end(),std::greater<int>());
-        for (int y : temp) {
-            std::cout << static_cast<int>(y) << " ";
+        std::stable_sort(temp.begin(),temp.end(),[](const std::pair<std::string, double> &a, const std::pair<std::string, double> &b) {
+                             return a.second > b.second;
+                         });
+        for (const auto& y : temp) {
+            std::cout << y.second << " - " << y.first << std::endl;;
         }
     }
     std::cout << std::endl;
 }
 
-void Functions::data_finder(const std::vector<double> &vec, int x) { //check if there is a certain number in the vector
+void Functions::data_finder(const std::vector<std::pair<std::string,double>>& vec, double x) { //check if there is a certain number in the vector
+    bool found = false;
+    double search_number = x;
 
-    int search_number = x;
-    if ( std::find(vec.begin(), vec.end(), search_number ) !=vec.end()) {
+    for (const auto& y : vec) {
+        if (y.second == x) {
+            std::cout << "The value " << y.second << " was registered at the time " << y.first << std::endl;
+            found = true;
+        }
+        if (!found) {
+            std::cout << "The value was not found." << std::endl;
+        }
+
+    }
+    /*if ( std::find(vec.begin(), vec.end(), search_number ) !=vec.end()) {
         std::cout << search_number << " is here.\n";
     }else {
         std::cout << search_number << " is not here.\n";
     }
-    std::cout << std::endl;
+    std::cout << std::endl;*/
 }
 
-void Functions::Threshold_detection(const std::vector<double> &vec, int set_value) { //checks if any number in the vector exceeds a certain value
+void Functions::Threshold_detection(const std::vector<std::pair<std::string,double>>& vec, int set_value) { //checks if any number in the vector exceeds a certain value
     int warnings = 0;
-    for (int y : vec) {
-        if (y > set_value) {
+    for (auto& y : vec) {
+        if (y.second > set_value) {
             warnings++;
+            std::cout << "Value : " << y.second << " at the time :" << y.first << std::endl;
         }
     }
     std::cout << "The threshold value has been breached " << warnings << " number of times.\n";
