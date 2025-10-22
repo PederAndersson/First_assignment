@@ -156,24 +156,16 @@ void Functions::data_sorter(const std::vector<std::pair<std::string,double>>& ve
 }
 
 void Functions::data_finder(const std::vector<std::pair<std::string,double>>& vec, double x) { //check if there is a certain number in the vector
-    bool found = false;
-
+    bool check = false;
     for (const auto& y : vec) {
         if (y.second == x) {
             std::cout << "The value " << y.second << " was registered at the time " << y.first << std::endl;
-            found = true;
+            check = true;
         }
-        if (!found) {
+    }
+        if (check == false){
             std::cout << "The value was not found." << std::endl;
         }
-
-    }
-    /*if ( std::find(vec.begin(), vec.end(), search_number ) !=vec.end()) {
-        std::cout << search_number << " is here.\n";
-    }else {
-        std::cout << search_number << " is not here.\n";
-    }
-    std::cout << std::endl;*/
 }
 
 void Functions::Threshold_detection(const std::vector<std::pair<std::string,double>>& vec, int set_value) { //checks if any number in the vector exceeds a certain value
