@@ -157,7 +157,6 @@ void Functions::data_sorter(const std::vector<std::pair<std::string,double>>& ve
 
 void Functions::data_finder(const std::vector<std::pair<std::string,double>>& vec, double x) { //check if there is a certain number in the vector
     bool found = false;
-    double search_number = x;
 
     for (const auto& y : vec) {
         if (y.second == x) {

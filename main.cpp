@@ -5,6 +5,67 @@
 #include "functions.h"
 #include "statistics.h"
 
+void writeToDatabase(const std::string& filename, const std::vector<std::pair<std::string,double>>& vec) {
+
+    std::fstream myFile;
+    myFile.open(filename,std::ios::app);
+    if (!myFile.is_open()) {
+        std::cerr << "Error file not found";
+        return;
+    }
+    if (myFile.tellp() == 0) {
+    myFile << "Timestamp" << "," << "value" << "\n";
+    }
+    if (!vec.empty()) {
+        for (const auto& x : vec) {
+
+            myFile << x.first << "," << x.second << "\n";
+        }
+    } else {
+        std::cout << "Sensor data is empty" << "\n";
+    }
+
+    myFile.close();
+    std::cout << "Data saved to database\n";
+}
+
+void readFromDatabase(const std::string& filename, std::vector<std::string>& timestamp,std::vector<double>& value) {
+    std::fstream myFile;
+    myFile.open(filename, std::ios::in);
+    if (!myFile.is_open()) {
+        std::cerr << "File not found.\n";
+        return;
+    }
+    if (myFile.peek() == std::ifstream::traits_type::eof()) {
+        std::cout << "File is empty.\n";
+        return;
+    }
+    std::string line;
+
+    std::getline(myFile, line);
+
+    while (std::getline(myFile,line)) {
+        if (line.empty()) continue;
+        std::stringstream ss(line);
+        std::string timestr;
+        std::getline(ss, timestr, ',');
+
+        std::string valstr;
+        std::getline(ss, valstr, ',');
+        try {
+            double val = std::stod(valstr);
+            value.push_back(val);
+            timestamp.push_back(timestr);
+        } catch (const std::invalid_argument& ) {
+            std::cerr << "Unauthorized value on line :" << line << "\n";
+        }
+
+    }
+
+    myFile.close();
+    std::cout << "Data retrieved.\n";
+}
+
 
 
 int main() {
@@ -94,17 +155,17 @@ int main() {
             }
 
             case 8: {
-
-                std::fstream myFile;
-                myFile.open(filename,std::ios::app);
-                if (!myFile.is_open()) {
-                    std::cerr << "Error file not found";
+                std::cout << "Do you want to write to the database or get data?\n";
+                std::cout << "1.Write to database.\t 2.Get data from database : ";
+                int choice = Functions::valid_input();
+                if (choice == 1) {
+                writeToDatabase(filename,combine_value_timestamp);
+                } else if (choice == 2) {
+                readFromDatabase(filename,store_timestamps,store_values);
+                Functions::combine_data_timestamp(store_values,store_timestamps,combine_value_timestamp);
+                } else {
+                    std::cout << "Learn to read donkey... 1 or 2.\n";
                 }
-                for (auto& x : combine_value_timestamp) {
-                    myFile << x.first << "," << x.second << std::endl;
-                }
-                myFile.close();
-
             break;
             }
 
