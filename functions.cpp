@@ -4,8 +4,9 @@
 #include <iostream>
 #include <sstream>
 #include <thread>
+#include <iomanip>
 
-int Functions::valid_input() { // function to validate that your input is a number not a letter
+int Functions::validInput() { // function to validate that your input is a number not a letter
     int y;
     while (true) {
         if (!(std::cin >> y)) {
@@ -18,11 +19,11 @@ int Functions::valid_input() { // function to validate that your input is a numb
     }
 }
 
-int Functions::input_sensor_value() { // function to input a new value.
+int Functions::inputSensorValue() { // function to input a new value.
     while (true) {
         std::cout << "Please input your value between 1 and 50:";
 
-        int value = Functions::valid_input();
+        int value = Functions::validInput();
 
         if (value < 1 || value >50) {
             std::cout << "Value is not with the specified range. try again.\n";
@@ -32,7 +33,7 @@ int Functions::input_sensor_value() { // function to input a new value.
     }
 }
 
-bool Functions::run_again(){ // function to check if you want to run again.
+bool Functions::runAgain(){ // function to check if you want to run again.
     char answer;
 
     while (true) {
@@ -54,7 +55,7 @@ bool Functions::run_again(){ // function to check if you want to run again.
     }
 }
 
-void Functions::print_menu() {
+void Functions::printMenu() {
     std::cout << "Hello, welcome to our sensor input/output program!, what would you like to do?\n";
     std::cout << "1. Input values.\n";
     std::cout << "2. Download sensor data.\n";
@@ -68,15 +69,15 @@ void Functions::print_menu() {
     std::cout << "What would you like to do: ";
 }
 
-void Functions::generate_numbers(std::vector<double>& vec, std::vector<std::string>& vec2) {
-    const int choice = Functions::valid_input();
+void Functions::generateData(std::vector<double>& vec, std::vector<std::string>& vec2) {
+    const int choice = Functions::validInput();
     std::random_device rd; //using this random generator as a seed.
     std::mt19937 mt(rd()); //generating random numbers with the mersenne twister seeded with random_device.
     std::uniform_int_distribution uniform (1, 50); // set the range for the highest and lowest number generated, while handling the statistical spread of numbers
 
     for (int i = 0; i < choice; i++) {
         vec.push_back(uniform(mt)); // for loop to push the random numbers to the vector.
-        std::string timestamp = Functions::generate_timestamp();
+        std::string timestamp = Functions::generateTimestamp();
         vec2.push_back(timestamp);
     }
     Functions::counter();
@@ -84,7 +85,7 @@ void Functions::generate_numbers(std::vector<double>& vec, std::vector<std::stri
     std::cout << std::endl;
 }
 
-std::string Functions::generate_timestamp() { //function to generate random timestamps
+std::string Functions::generateTimestamp() { //function to generate random timestamps
     std::random_device rd; //using this random generator as a seed.
     std::mt19937 mt(rd()); //generating random numbers with the mersenne twister seeded with random_device.
     std::uniform_int_distribution<int> hour_dist(0, 23);
@@ -102,7 +103,7 @@ std::string Functions::generate_timestamp() { //function to generate random time
      return oss.str(); // returns the stream to a variable
 }
 
-void Functions::print_storage_usage(const std::vector<double>& vec) { //function to simulate to see how much space is occupied
+void Functions::printStorageUsage(const std::vector<double>& vec) { //function to simulate to see how much space is occupied
     constexpr float storage_size = 500; //simulated size of storage space on the sensor module.
     float percentage = 0;
     percentage = (vec.size() / storage_size) * 100;
@@ -121,7 +122,7 @@ void Functions::counter() { //a counter to simulate a progressbar.
     std::cout << "100% done!" << std::endl;
 }
 
-void Functions::data_sorter(const std::vector<std::pair<std::string,double>>& vec,const int x) { //function to sort the data either ascending or descending also checks if it's empty
+void Functions::dataSorter(const std::vector<std::pair<std::string,double>>& vec,const int x) { //function to sort the data either ascending or descending also checks if it's empty
     std::vector<std::pair<std::string,double>> temp = {};
     for (const auto& y : vec) {
         temp.push_back(y);
@@ -151,7 +152,7 @@ void Functions::data_sorter(const std::vector<std::pair<std::string,double>>& ve
     std::cout << std::endl;
 }
 
-void Functions::data_finder(const std::vector<std::pair<std::string,double>>& vec, double x) { //check if there is a certain number in the vector
+void Functions::dataFinder(const std::vector<std::pair<std::string,double>>& vec, double x) { //check if there is a certain number in the vector
     bool check = false;
     for (const auto& y : vec) {
         if (y.second == x) {
@@ -164,7 +165,7 @@ void Functions::data_finder(const std::vector<std::pair<std::string,double>>& ve
         }
 }
 
-void Functions::Threshold_detection(const std::vector<std::pair<std::string,double>>& vec, int set_value) { //checks if any number in the vector exceeds a certain value
+void Functions::ThresholdDetection(const std::vector<std::pair<std::string,double>>& vec, int set_value) { //checks if any number in the vector exceeds a certain value
     int warnings = 0;
     for (auto& y : vec) {
         if (y.second > set_value) {
@@ -175,7 +176,7 @@ void Functions::Threshold_detection(const std::vector<std::pair<std::string,doub
     std::cout << "The threshold value has been breached " << warnings << " number of times.\n";
 }
 
-void Functions::combine_value_timestamp(const std::vector<double>& store_value, const std::vector<std::string>& store_timestamp, std::vector<std::pair<std::string,double>>& combine) {
+void Functions::combineValueTimestamp(const std::vector<double>& store_value, const std::vector<std::string>& store_timestamp, std::vector<std::pair<std::string,double>>& combine) {
     if (store_value.size() == store_timestamp.size()) {
         for (size_t i = 0; i < store_value.size(); i++) {
             auto c = std::make_pair(store_timestamp[i],store_value[i]);
@@ -248,7 +249,7 @@ void Functions::readFromDatabase(const std::string& filename, std::vector<std::s
 void Functions::clearDatabase(const std::string& filename) { //clears out the database
     std::cout << "Are you sure you want to delete the data?\n";
     std::cout << "1.Yes \t 2.No :";
-    if (Functions::valid_input() == 1) {
+    if (Functions::validInput() == 1) {
     std::fstream myFile;
     myFile.open(filename, std::ofstream::out | std::ofstream::trunc);
     myFile.flush();

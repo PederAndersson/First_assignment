@@ -5,15 +5,15 @@
 #ifndef FIRST_ASSIGNMENT_CALCULATIONS_H
 #define FIRST_ASSIGNMENT_CALCULATIONS_H
 #include <vector>
-#include <cmath>
+
 
 class Calculations {
 
     public:
-    static double variance_value (const std::vector<double>&);
-    static int min_value(const std::vector<double>& store_value);
-    static int max_value(const std::vector<double>& store_value);
-    static double vector_sum(const std::vector<double>& store_value);
+    static double varianceValue (const std::vector<double>&);
+    static int minValue(const std::vector<double>& store_value);
+    static int maxValue(const std::vector<double>& store_value);
+    static double vectorSum(const std::vector<double>& store_value);
 };
 
 

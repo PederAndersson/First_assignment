@@ -5,8 +5,8 @@
 #ifndef FIRST_ASSIGNMENT_STATISTICS_H
 #define FIRST_ASSIGNMENT_STATISTICS_H
 #include <vector>
-#include <iostream>
-#include <cmath>
+
+
 
 struct Statistics {
     int number_entries = {};
@@ -17,8 +17,8 @@ struct Statistics {
     double variance = {};
     double standard_dev = {};
 
-    static Statistics calculate(const std::vector<double> &);
-    static void print_statistics(const Statistics& stats);
+    static Statistics calculateStatistics(const std::vector<double> &);
+    static void printStatistics(const Statistics& stats);
 }; //struct to store all the statistics data.
 
 #endif //FIRST_ASSIGNMENT_STATISTICS_H
