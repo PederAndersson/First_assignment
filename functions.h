@@ -29,6 +29,7 @@ public:
    static void combine_value_timestamp(const std::vector<double>& store_value, const std::vector<std::string>& store_timestamp, std::vector<std::pair<std::string,double>>& combine);
    static void writeToDatabase(const std::string& filename, const std::vector<std::pair<std::string,double>>& vec);
    static void readFromDatabase(const std::string& filename, std::vector<std::string>& timestamp,std::vector<double>& value);
+   static void clearDatabase(const std::string& filename);
 
 };
 #endif //FIRST_ASSIGNMENT_FUNCTIONS_H

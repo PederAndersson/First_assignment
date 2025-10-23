@@ -17,10 +17,10 @@ int main() {
     std::vector<std::pair<std::string,double>> combine_value_timestamp = {};
 
     while (true) {
-        int entries = 0;
         Functions::print_menu();
         switch (Functions::valid_input()) {
             case 1: {
+                int entries = 0;
 
                 do {
                     std::cout << "Here you can input data.\n";
@@ -96,16 +96,26 @@ int main() {
 
             case 8: {
                 std::cout << "Do you want to write to the database or get data?\n";
-                std::cout << "1.Write to database.\t 2.Get data from database : ";
-                int choice = Functions::valid_input();
-                if (choice == 1) {
-                Functions::writeToDatabase(filename,combine_value_timestamp);
-                } else if (choice == 2) {
-                Functions::readFromDatabase(filename,store_timestamps,store_values);
-                Functions::combine_value_timestamp(store_values,store_timestamps,combine_value_timestamp);
-                } else {
-                    std::cout << "Learn to read donkey... 1 or 2.\n";
-                }
+                std::cout << "1.Write to database.\t 2.Get data from database. \t 3.Clear database : ";
+               switch (Functions::valid_input()) {
+                    case 1: {
+                        Functions::writeToDatabase(filename,combine_value_timestamp);
+                        break;
+                    }
+                    case 2: {
+                        Functions::readFromDatabase(filename,store_timestamps,store_values);
+                        Functions::combine_value_timestamp(store_values,store_timestamps,combine_value_timestamp);
+                        break;
+                    }
+                    case 3: {
+                        Functions::clearDatabase(filename);
+                        break;
+                    }
+                    default: {
+                        std::cout << "I said 1-3 you donkey...\n";
+                        break;
+                    }
+               }
             break;
             }
 

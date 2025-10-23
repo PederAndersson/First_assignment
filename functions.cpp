@@ -67,7 +67,7 @@ void Functions::print_menu() {
     std::cout << "5. Sort values.\n";
     std::cout << "6. Storage usage.\n";
     std::cout << "7. Threshold detector.\n";
-    std::cout << "8. Read/write on database.\n";
+    std::cout << "8. Read/write/clear database.\n";
     std::cout << "9. Exit.\n";
     std::cout << "What would you like to do: ";
 }
@@ -189,7 +189,7 @@ void Functions::combine_value_timestamp(const std::vector<double>& store_value, 
     }
 }
 
-void Functions::writeToDatabase(const std::string& filename, const std::vector<std::pair<std::string,double>>& vec) {
+void Functions::writeToDatabase(const std::string& filename, const std::vector<std::pair<std::string,double>>& vec) { //writes from a vector to the database
 
     std::fstream myFile;
     myFile.open(filename,std::ios::app);
@@ -213,7 +213,7 @@ void Functions::writeToDatabase(const std::string& filename, const std::vector<s
     std::cout << "Data saved to database\n";
 }
 
-void Functions::readFromDatabase(const std::string& filename, std::vector<std::string>& timestamp,std::vector<double>& value) {
+void Functions::readFromDatabase(const std::string& filename, std::vector<std::string>& timestamp,std::vector<double>& value) { //reads from the database and copies to vectors
     std::fstream myFile;
     myFile.open(filename, std::ios::in);
     if (!myFile.is_open()) {
@@ -248,4 +248,11 @@ void Functions::readFromDatabase(const std::string& filename, std::vector<std::s
 
     myFile.close();
     std::cout << "Data retrieved.\n";
+}
+
+void Functions::clearDatabase(const std::string& filename) { //clears out the database
+    std::fstream myFile;
+    myFile.open(filename, std::ofstream::out | std::ofstream::trunc);
+    myFile.flush();
+    myFile.close();
 }
