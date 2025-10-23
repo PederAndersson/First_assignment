@@ -1,122 +1,127 @@
 
 #include <iomanip>
 
-
-#include "calculations.h"
 #include "functions.h"
+#include "statistics.h"
 
 
-struct Statistics {
-    int number_entries = {};
-    double sum = {};
-    double mean = {};
-    double value_min = {};
-    double value_max = {};
-    double variance = {};
-    double standard_dev = {};
 
-    static Statistics calculate(const std::vector<double> &);
-}; //struct to store all the statistics data.
-
-Statistics Statistics::calculate(const std::vector<double> &store_value){
-
-    Statistics stats;
-
-    stats.number_entries = static_cast<int>(store_value.size());
-    stats.sum = Calculations::vector_sum(store_value);
-    stats.mean = stats.sum/static_cast<double>(store_value.size());
-    stats.value_min = Calculations::min_value(store_value);
-    stats.value_max = Calculations::max_value(store_value);
-    stats.variance = Calculations::variance_value(store_value);
-    stats.standard_dev = sqrt(stats.variance);
-    return stats;
-}
-
-void print_statistics(const Statistics& stats){
-    std::cout << "Here you can see all the statistics.\n";
-    std::cout << "Number of entries :" << stats.number_entries << "\n";
-    std::cout << "Sum :" << stats.sum << "\n";
-    std::cout << "The average value :" << stats.mean << "\n";
-    std::cout << "The highest value :" << stats.value_max << "\t the lowest value :" << stats.value_min << "\n";
-    std::cout << "The variance :" << stats.variance << "\n";
-    std::cout << "The standard deviation :" << stats.standard_dev << "\n";
-    std::cout << std::endl;
-
-}
 
 
 
 int main() {
+    const std::string filename = "Sensor_database.csv";
     std::cout << std::fixed << std::setprecision(2);
     std::vector<double> store_values = {};
-    Statistics stats;
+    std::vector<std::string> store_timestamps = {};
+    std::vector<std::pair<std::string,double>> combine_value_timestamp = {};
 
     while (true) {
-        int entries = 0;
         Functions::print_menu();
-        std::cout << "What would you like to do : ";
         switch (Functions::valid_input()) {
-            case 1:
+            case 1: {
+                int entries = 0;
+
                 do {
                     std::cout << "Here you can input data.\n";
                     std::cout << "how many values would you like input?";
                     entries = Functions::valid_input();
                     for (int i = 0; i < entries; i++) {
                         store_values.push_back(Functions::input_sensor_value());
+                        store_timestamps.push_back(Functions::generate_timestamp());
                     }
                 }while (Functions::run_again() == true);
+                Functions::combine_value_timestamp(store_values,store_timestamps,combine_value_timestamp);
                 std::cout << std::endl;
                 break;
-            case 3:
-                if (store_values.empty()) {
-                    std::cout << "The datastorage is empty, please input your findings\n";
+            }
+            case 2: {
 
-                    std::cout << "how many values would you like input?";
-                    entries = Functions::valid_input();
-                    for (int i = 0; i < entries; i++) {
-                        store_values.push_back(Functions::input_sensor_value());
-                    }
+                std::cout << "please input the the amount of data to generate: ";
+                Functions::generate_numbers(store_values,store_timestamps);
+                Functions::combine_value_timestamp(store_values,store_timestamps,combine_value_timestamp);
+
+                break;
+            }
+
+            case 3: {
+
+                if (store_values.empty()) {
+                    std::cout << "The datastorage is empty.\n\n";
                     break;
                 }
-                stats = Statistics::calculate(store_values);
-                print_statistics(stats);
+                Statistics stats = Statistics::calculate(store_values);
+                Statistics::print_statistics(stats);
+                for (auto& x : combine_value_timestamp) {
+                    std::cout << x.first << " - " << x.second << "\n";
+                }
                 break;
-            case 2:
-                std::cout << "please input the the amount of data to generate: ";
-                Functions::generate_numbers(store_values);
-                break;
+            }
 
-            case 4:
+            case 4: {
+
                 std::cout << "Here we can find a specific value between 1-50.\n";
                 std::cout << "input value you want to search for :";
-                Functions::data_finder(store_values,Functions::valid_input());
+                Functions::data_finder(combine_value_timestamp,Functions::valid_input());
                 break;
+            }
 
 
-            case 5:
+            case 5: {
+
 
                 std::cout << "Here we can sort the value in ascending or descending order.\n";
                 std::cout << "1. Ascending. \n" << "2. Descending\n";
                 std::cout << "what would you like to do :";
-                Functions::data_sorter(store_values,Functions::valid_input());
+                Functions::data_sorter(combine_value_timestamp,Functions::valid_input());
                 break;
+            }
 
 
-            case 6:
+            case 6: {
+
                 std::cout << "Storage usage.\n";
                 Functions::print_storage_usage(store_values);
 
                 break;
+            }
 
-            case 7:
+            case 7: {
+
                 std::cout << "Here you can check if any of the sensor measurements has gone above a certain value.\n";
                 std::cout << "what value would you like to check? (between 1-50) :";
-                Functions::Threshold_detection(store_values,Functions::valid_input());
+                Functions::Threshold_detection(combine_value_timestamp,Functions::valid_input());
                 break;
+            }
+
+            case 8: {
+                std::cout << "Do you want to write to the database or get data?\n";
+                std::cout << "1.Write to database.\t 2.Get data from database. \t 3.Clear database : ";
+               switch (Functions::valid_input()) {
+                    case 1: {
+                        Functions::writeToDatabase(filename,combine_value_timestamp);
+                        break;
+                    }
+                    case 2: {
+                        Functions::readFromDatabase(filename,store_timestamps,store_values);
+                        Functions::combine_value_timestamp(store_values,store_timestamps,combine_value_timestamp);
+                        break;
+                    }
+                    case 3: {
+                        Functions::clearDatabase(filename);
+                        break;
+                    }
+                    default: {
+                        std::cout << "I said 1-3 you donkey...\n";
+                        break;
+                    }
+               }
+            break;
+            }
 
             default:
             std::cout << "Have a good day.";
-            return 0;
+                return 0;
         }
     }
 }
