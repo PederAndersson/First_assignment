@@ -3,6 +3,8 @@
 
 #include "functions.h"
 #include <algorithm>
+#include <fstream>
+#include <sstream>
 
 
 
@@ -41,7 +43,7 @@ bool Functions::run_again(){ // function to check if you want to run again.
         std::cout << "Would you like to go again? (y/n) ";
         std::cin >> answer;
        char ch = answer;
-       char lowercase = std::tolower(ch);
+        char lowercase = std::tolower(ch);
         if (std::isdigit(ch)) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
@@ -72,14 +74,13 @@ void Functions::print_menu() {
 
 void Functions::generate_numbers(std::vector<double>& vec, std::vector<std::string>& vec2) {
     const int choice = Functions::valid_input();
-    std::string timestamp;
     std::random_device rd; //using this random generator as a seed.
     std::mt19937 mt(rd()); //generating random numbers with the mersenne twister seeded with random_device.
     std::uniform_int_distribution uniform (1, 50); // set the range for the highest and lowest number generated, while handling the statistical spread of numbers
 
     for (int i = 0; i < choice; i++) {
         vec.push_back(uniform(mt)); // for loop to push the random numbers to the vector.
-        timestamp = Functions::generate_timestamp();
+        std::string timestamp = Functions::generate_timestamp();
         vec2.push_back(timestamp);
     }
     Functions::counter();
@@ -107,7 +108,7 @@ std::string Functions::generate_timestamp() { //function to generate random time
 }
 
 void Functions::print_storage_usage(const std::vector<double>& vec) { //function to simulate to see how much space is occupied
-    constexpr float storage_size = 500; //simulated size storage space on the sensor module.
+    constexpr float storage_size = 500; //simulated size of storage space on the sensor module.
     float percentage = 0;
     percentage = (vec.size() / storage_size) * 100;
 
@@ -179,7 +180,7 @@ void Functions::Threshold_detection(const std::vector<std::pair<std::string,doub
     std::cout << "The threshold value has been breached " << warnings << " number of times.\n";
 }
 
-void Functions::combine_data_timestamp(const std::vector<double>& store_value, const std::vector<std::string>& store_timestamp, std::vector<std::pair<std::string,double>>& combine) {
+void Functions::combine_value_timestamp(const std::vector<double>& store_value, const std::vector<std::string>& store_timestamp, std::vector<std::pair<std::string,double>>& combine) {
     if (store_value.size() == store_timestamp.size()) {
         for (size_t i = 0; i < store_value.size(); i++) {
             auto c = std::make_pair(store_timestamp[i],store_value[i]);
@@ -188,4 +189,63 @@ void Functions::combine_data_timestamp(const std::vector<double>& store_value, c
     }
 }
 
+void Functions::writeToDatabase(const std::string& filename, const std::vector<std::pair<std::string,double>>& vec) {
 
+    std::fstream myFile;
+    myFile.open(filename,std::ios::app);
+    if (!myFile.is_open()) {
+        std::cerr << "Error file not found";
+        return;
+    }
+    if (myFile.tellp() == 0) {
+        myFile << "Timestamp" << "," << "value" << "\n";
+    }
+    if (!vec.empty()) {
+        for (const auto& x : vec) {
+
+            myFile << x.first << "," << x.second << "\n";
+        }
+    } else {
+        std::cout << "Sensor data is empty" << "\n";
+    }
+
+    myFile.close();
+    std::cout << "Data saved to database\n";
+}
+
+void Functions::readFromDatabase(const std::string& filename, std::vector<std::string>& timestamp,std::vector<double>& value) {
+    std::fstream myFile;
+    myFile.open(filename, std::ios::in);
+    if (!myFile.is_open()) {
+        std::cerr << "File not found.\n";
+        return;
+    }
+    if (myFile.peek() == std::ifstream::traits_type::eof()) {
+        std::cout << "File is empty.\n";
+        return;
+    }
+    std::string line;
+
+    std::getline(myFile, line);
+
+    while (std::getline(myFile,line)) {
+        if (line.empty()) continue;
+        std::stringstream ss(line);
+        std::string timestr;
+        std::getline(ss, timestr, ',');
+
+        std::string valstr;
+        std::getline(ss, valstr, ',');
+        try {
+            double val = std::stod(valstr);
+            value.push_back(val);
+            timestamp.push_back(timestr);
+        } catch (const std::invalid_argument& ) {
+            std::cerr << "Unauthorized value on line :" << line << "\n";
+        }
+
+    }
+
+    myFile.close();
+    std::cout << "Data retrieved.\n";
+}
