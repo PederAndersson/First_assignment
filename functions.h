@@ -1,15 +1,8 @@
-
 #ifndef FIRST_ASSIGNMENT_FUNCTIONS_H
 #define FIRST_ASSIGNMENT_FUNCTIONS_H
 #include <vector>
-#include <iostream>
-#include <limits>
 #include <random>
 #include <chrono>
-#include <thread>
-
-#include <sstream>
-#include <random>
 
 
 class Functions {

@@ -1,13 +1,9 @@
-
-
-
 #include "functions.h"
 #include <algorithm>
 #include <fstream>
+#include <iostream>
 #include <sstream>
-
-
-
+#include <thread>
 
 int Functions::valid_input() { // function to validate that your input is a number not a letter
     int y;
@@ -89,7 +85,6 @@ void Functions::generate_numbers(std::vector<double>& vec, std::vector<std::stri
 }
 
 std::string Functions::generate_timestamp() { //function to generate random timestamps
-    std::string timestamp;
     std::random_device rd; //using this random generator as a seed.
     std::mt19937 mt(rd()); //generating random numbers with the mersenne twister seeded with random_device.
     std::uniform_int_distribution<int> hour_dist(0, 23);
@@ -100,11 +95,11 @@ std::string Functions::generate_timestamp() { //function to generate random time
     int minute = minute_dist(mt);
     int second = second_dist(mt);
 
-    std::ostringstream oss;
-    oss << std::setfill('0') << std::setw(2) << hour << ":"
+    std::ostringstream oss; //create outgoing string stream
+    oss << std::setfill('0') << std::setw(2) << hour << ":" //content of the stream
         << std::setfill('0') << std::setw(2) << minute << ":"
         << std::setfill('0') << std::setw(2) << second;
-     return oss.str();
+     return oss.str(); // returns the stream to a variable
 }
 
 void Functions::print_storage_usage(const std::vector<double>& vec) { //function to simulate to see how much space is occupied
@@ -251,8 +246,15 @@ void Functions::readFromDatabase(const std::string& filename, std::vector<std::s
 }
 
 void Functions::clearDatabase(const std::string& filename) { //clears out the database
+    std::cout << "Are you sure you want to delete the data?\n";
+    std::cout << "1.Yes \t 2.No :";
+    if (Functions::valid_input() == 1) {
     std::fstream myFile;
     myFile.open(filename, std::ofstream::out | std::ofstream::trunc);
     myFile.flush();
     myFile.close();
+    std::cout << "Data cleared.\n";
+    } else {
+        std::cout << "Data not cleared, have a nice day.\n";
+    }
 }

@@ -52,9 +52,6 @@ int main() {
                 }
                 Statistics stats = Statistics::calculate(store_values);
                 Statistics::print_statistics(stats);
-                for (auto& x : combine_value_timestamp) {
-                    std::cout << x.first << " - " << x.second << "\n";
-                }
                 break;
             }
 
